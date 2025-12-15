@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Happy 2nd Anniversary, Ky!!!</title>
+    <link rel="icon" type="image/png" href="puso2.jpg">
+    <style>
+        /* GENERAL STYLES */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        /* LANDING SCREEN */
+        #landing {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #fde2e4;
+        }
+
+        #landing h1 {
+            font-size: 36px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 18px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            background-color: #ff4d6d;
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            background-color: #e63956;
+        }
+
+        /* WRAPPED SLIDES */
+        #wrapped {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* hidden initially */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            transition: background 0.8s ease;
+        }
+        #progress {
+            display: flex;
+            gap: 10px;
+            position: fixed;       /* FIXED ensures it's always on screen */
+            bottom: 30px;          /* distance from bottom */
+            left: 50%;             /* center horizontally */
+            transform: translateX(-50%);
+            z-index: 999;          /* very high to appear above slides */
+        }
+
+        .dot {
+             width: 12px;
+            height: 12px;
+            border-radius: 50%;
+             background: rgba(255, 255, 255, 0.5);
+            transition: background 0.3s;
+        }
+
+        .dot.active {
+            background: white;
+        }
+
+
+        .slide {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeSlide 1s ease;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide h1, .slide p {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: textFade 0.8s forwards;
+        }
+
+        .slide.active h1 {
+            animation-delay: 0.2s;
+        }
+
+        .slide.active p {
+            animation-delay: 0.5s;
+        }
+
+        .slide img {
+            opacity: 0;
+            transform: scale(0.95);
+            margin-top: 20px;
+            border-radius: 16px;
+            max-width: 80%;
+            max-height: 300px;
+            animation: imageFade 1s forwards;
+            animation-delay: 0.8s;
+        }
+        .love-letter {
+            max-width: 600px;
+            margin: 20px auto;
+            font-size: 18px;
+            text-align: center;
+            white-space: pre-wrap; /* keeps line breaks */
+            font-family: 'Courier New', monospace; /* typewriter look */
+            color: #1a1a1a;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        
+
+        @keyframes textFade {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes imageFade {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeSlide {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LANDING SCREEN -->
+    <div id="landing">
+        <h1>Do you want to see something special?</h1>
+        <button class="choiceBtn">ANO YAN?! 😮😧</button>
+        <button class="choiceBtn">OK SIGE 🥱😒</button>
+    </div>
+
+    <!-- WRAPPED SLIDES -->
+    <div id="wrapped" class="wrapped">
+        <div class="slide" data-bg="linear-gradient(135deg, #ff9a9e, #fad0c4)">
+            <h1>I ❤️</h1>
+            <p>Happy 2nd Anniversary, Ky! It's our day and after all, we're on this together</p>
+            <img src="assets\images/images/memory1.jpg" alt="Memory 1">
+        </div>
+        <div class="slide" data-bg="linear-gradient(135deg, #a1c4fd, #c2e9fb)">
+            <h1>LOVE 💕</h1>
+            <p>I'm so glad that we reach this milestone and hopefully we filled the next journey with more love and quality time!</p>
+            <img src="assets\images/images/memory2.jpg" alt="Memory 2">
+        </div>
+        <div class="slide" data-bg="linear-gradient(135deg, #fbc2eb, #a6c1ee)">
+            <h1>YOU 🐢😘🥰</h1>
+            <p>My always favorite: You, My Love!</p>
+            <img src="assets\images/images/memory3.jpg" alt="Memory 3">
+        </div>
+        <!-- Slide 4: Love Letter -->
+        <div class="slide" data-bg="linear-gradient(135deg, #a8e6cf, #d0f0c0)">
+            <h1>last, we can't forget the letter hehe :) </h1>
+            <p id="love-letter" class="love-letter"></p>
+        </div>
+
+         <!-- Progress Bar -->
+        <div id="progress">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
+    </div>
+    <audio id="bg-music" src="assets\images/music/indie-song.mp3" loop></audio>
+
+    <script>
+        const buttons = document.querySelectorAll(".choiceBtn");
+        const landing = document.getElementById("landing");
+        const wrapped = document.getElementById("wrapped");
+        const slides = document.querySelectorAll(".slide");
+        const music = document.getElementById("bg-music");
+        const dots = document.querySelectorAll(".dot");
+
+        let currentSlide = 0;
+
+        // BUTTON CLICK → SHOW WRAPPED + PLAY MUSIC
+        buttons.forEach(button => {
+        button.addEventListener("click", () => {
+        landing.style.display = "none";
+        wrapped.style.display = "flex";
+
+        slides.forEach(slide => slide.classList.remove("active"));
+        slides[0].classList.add("active");
+        wrapped.style.background = slides[0].getAttribute("data-bg");
+
+        // Update progress bar
+        updateDots();
+
+        // Play music
+        music.volume = 0.5; // optional: lower volume
+        music.play();
+
+        currentSlide = 0;
+    });
+});
+
+// CLICK ANYWHERE ON WRAPPED → NEXT SLIDE
+wrapped.addEventListener("click", () => {
+    if (currentSlide < slides.length - 1) {
+        slides[currentSlide].classList.remove("active");
+        currentSlide++;
+        slides[currentSlide].classList.add("active");
+        wrapped.style.background = slides[currentSlide].getAttribute("data-bg");
+
+        // Update progress bar
+        updateDots();
+    }
+});
+
+// FUNCTION TO UPDATE PROGRESS BAR
+function updateDots() {
+    dots.forEach((dot, index) => {
+        dot.classList.toggle("active", index === currentSlide);
+    });
+}
+const letterText = `My dearest ky,
+
+hehe love letter code ito pero ANG BILIS NG PANAHON! like we just sharing reels and asaran lang noon but look at us, we reached 2 years on this relationship! We are both maturing and have own goals na cause we are college students now... But that doesn't mean na my love will change or fade, It's always you and I choose you every single day.
+Tanging pahinga kita at takbuhan kapag magulo at inaaway ng mundo. I'll stil be your one and only kakampi sa lahat and you deserve more than a good life, you must have a happy and peaceful one. I'm so glad that I'm here with you...
+
+Thank you for being my kakampi sa lahat and resting place, Happy Anniversary!
+
+will always love you,
+Jeff`;
+
+// Typewriter function
+function typeLetter() {
+    const letterElement = document.getElementById("love-letter");
+    letterElement.textContent = ""; // clear previous content
+    let index = 0;
+
+    const typing = setInterval(() => {
+        letterElement.textContent += letterText.charAt(index);
+        index++;
+        if (index === letterText.length) clearInterval(typing);
+    }, 60); // adjust speed (50ms per character)
+}
+
+// Trigger typewriter only when final slide appears
+wrapped.addEventListener("click", () => {
+    if (currentSlide === slides.length - 1) {
+        typeLetter();
+    }
+});
+    </script>
+
+</body>
+</html>
